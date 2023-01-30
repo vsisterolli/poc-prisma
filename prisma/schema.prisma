@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model animes {
+  id      Int           @id @default(autoincrement())
+  name    String
+  status  watch_status? @default(not_watched)
+  user_id Int
+  image   String
+  users   users         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id       Int      @id @default(autoincrement())
+  email    String
+  username String
+  password String
+  animes   animes[]
+}
+
+enum watch_status {
+  not_watched @map("not watched")
+  watching
+  watched
+}
