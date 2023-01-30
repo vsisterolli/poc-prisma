@@ -4,7 +4,6 @@ import DecodedJwt from "../protocols/decodedJwt.protocols.js";
 
 export default async function validateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     
-    // precisei usar any já que o authorization pode ser undefined!!
     let token = req.headers.authorization as string;
     if(!token) {
         res.sendStatus(403);

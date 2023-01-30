@@ -3,7 +3,7 @@ import {NextFunction, Request, Response} from "express";
 import {QueryResult} from "pg";
 import registerSchema from "../schemas/registerSchema.js";
 import loginSchema from "../schemas/loginSchema.js";
-import {User} from "../protocols/user.protocols.js";
+import reviewSchema from "../schemas/reviewSchema.js";
 import animeSchema from "../schemas/animeSchema.js";
 import prisma from "../db/database.js";
 
@@ -52,3 +52,23 @@ export function validateUpdate(req: Request, res: Response, next: NextFunction):
         next();    
 }
 
+export async function validateReview(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { error } = reviewSchema.validate(req.body);
+    const id: number = Number(req.params.id);
+    if(error)
+        res.status(422).send(error.message);
+    else { 
+        const anime = await prisma.animes.findUnique({
+            select: {
+                user_id: true
+            },
+            where: {
+                id: id
+            }
+        })
+        if(anime.user_id !== res.locals.user)
+            res.sendStatus(401);
+        else
+            next();    
+    }
+}

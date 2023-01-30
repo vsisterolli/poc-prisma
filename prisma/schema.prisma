@@ -14,14 +14,26 @@ model animes {
   user_id Int
   image   String
   users   users         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  reviews reviews[]
+}
+
+model reviews {
+  id          Int     @id @default(autoincrement())
+  user_id     Int?
+  anime_id    Int?
+  description String
+  rating      Int
+  animes      animes? @relation(fields: [anime_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users       users?  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model users {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   email    String
   username String
   password String
   animes   animes[]
+  reviews  reviews[]
 }
 
 enum watch_status {

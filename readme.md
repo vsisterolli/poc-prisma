@@ -72,3 +72,14 @@ DELETE /animes/:id
 Permite a deleção do anime.
 
 HTTP STATUS 200 SUCCESS caso bem sucedido, 401 UNAUTHORIZED caso o token do usuário não corresponda ao usuário que cadastrou o anime, 404 NOT FOUND caso o id não seja encontrado ou 403 FORBIDDEN caso o token esteja errado.
+
+POST /animes/:id/reviews
+
+Permite ao usuário postar um review do anime que ele cadastrou, de acordo com o seu id, e espera um body no seguinte formato:
+
+{
+    "description": string,
+    "rating": integer (intervalo de 0 a 5)
+}
+
+HTTP STATUS 201 CREATED caso bem sucedido, 401 UNAUTHORIZED caso o token do usuário não corresponda ao usuário que cadastrou o anime, 404 NOT FOUND caso o id não seja encontrado ou 403 FORBIDDEN caso o token esteja errado.

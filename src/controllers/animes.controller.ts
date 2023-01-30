@@ -92,3 +92,23 @@ export async function updateAnimeStatus(req: Request, res: Response) {
     
     return res.sendStatus(200)
 }
+
+export async function getReviews(req: Request, res: Response) {
+    res.status(201).send(await prisma.reviews.findMany({
+        where: {
+            user_id: res.locals.user
+        }
+    }))
+}
+
+export async function postReview(req: Request, res: Response) {
+    await prisma.reviews.create({
+        data: {
+            user_id: res.locals.user,
+            anime_id: Number(req.params.id),
+            description: req.body.description,
+            rating: req.body.rating
+        }
+    })
+    res.sendStatus(201)
+}
